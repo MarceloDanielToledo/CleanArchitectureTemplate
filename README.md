@@ -1,4 +1,4 @@
-[![es](https://img.shields.io/badge/lang-es-red)](https://github.com/MarceloDanielToledo/CleanArchitectureTemplate/blob/main/LICENSE)
+[![es](https://img.shields.io/badge/lang-es-red)](https://github.com/MarceloDanielToledo/CleanArchitectureTemplate/blob/main/README.es.md)
 
 # Clean Architecture Template ⚡
 

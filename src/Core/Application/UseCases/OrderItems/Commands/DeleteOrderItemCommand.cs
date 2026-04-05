@@ -4,7 +4,6 @@ using Application.UseCases.OrderItems.Specifications;
 using Application.UseCases.Orders.Queries;
 using Application.UseCases.Orders.Specifications;
 using Application.Wrappers;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 

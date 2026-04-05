@@ -1,23 +1,22 @@
-﻿using Application.Constants;
+using Application.Constants;
 using Application.Interfaces;
+using Application.UseCases.OrderItems.Mappings;
 using Application.UseCases.OrderItems.Responses;
 using Application.UseCases.OrderItems.Specifications;
 using Application.Wrappers;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.UseCases.OrderItems.Queries
 {
-    public class GetOrderItemByIdQuery(int orderId,int id) : IRequest<Response<OrderItemResponse>>
+    public class GetOrderItemByIdQuery(int orderId, int id) : IRequest<Response<OrderItemResponse>>
     {
         public int OrderId { get; } = orderId;
         public int Id { get; } = id;
     }
-    internal class GetOrderItemByIdQueryHandler(IRepositoryAsync<OrderItem> orderItemRepository, IMapper mapper) : IRequestHandler<GetOrderItemByIdQuery, Response<OrderItemResponse>>
+    internal class GetOrderItemByIdQueryHandler(IRepositoryAsync<OrderItem> orderItemRepository) : IRequestHandler<GetOrderItemByIdQuery, Response<OrderItemResponse>>
     {
         private readonly IRepositoryAsync<OrderItem> _orderItemRepository = orderItemRepository;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<Response<OrderItemResponse>> Handle(GetOrderItemByIdQuery request, CancellationToken cancellationToken)
         {
@@ -26,7 +25,7 @@ namespace Application.UseCases.OrderItems.Queries
             {
                 throw new KeyNotFoundException(ResponseMessages.NotFoundMessage);
             }
-            return Response<OrderItemResponse>.Success(_mapper.Map<OrderItemResponse>(record));
+            return Response<OrderItemResponse>.Success(record.ToResponse());
         }
     }
 }

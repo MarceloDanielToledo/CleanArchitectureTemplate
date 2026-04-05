@@ -1,9 +1,9 @@
-﻿using Application.Constants;
+using Application.Constants;
 using Application.Interfaces;
+using Application.UseCases.Products.Mappings;
 using Application.UseCases.Products.Requests;
 using Application.UseCases.Products.Responses;
 using Application.Wrappers;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
@@ -13,16 +13,15 @@ namespace Application.UseCases.Products.Commands
     {
         public CreateProductRequest Request { get; } = request;
     }
-    internal class CreateProductCommandHandler(IRepositoryAsync<Product> repositoryAsync, IMapper mapper) : IRequestHandler<CreateProductCommand, Response<ProductResponse>>
+    internal class CreateProductCommandHandler(IRepositoryAsync<Product> repositoryAsync) : IRequestHandler<CreateProductCommand, Response<ProductResponse>>
     {
         private readonly IRepositoryAsync<Product> _repositoryAsync = repositoryAsync;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<Response<ProductResponse>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            var newProduct = _mapper.Map<Product>(command.Request);
+            var newProduct = command.Request.ToEntity();
             var newProductCreated = await _repositoryAsync.AddAsync(newProduct, cancellationToken);
-            return Response<ProductResponse>.Success(_mapper.Map<ProductResponse>(newProductCreated), ResponseMessages.AddedSuccesfullyMessage);
+            return Response<ProductResponse>.Success(newProductCreated.ToResponse(), ResponseMessages.AddedSuccesfullyMessage);
         }
     }
 

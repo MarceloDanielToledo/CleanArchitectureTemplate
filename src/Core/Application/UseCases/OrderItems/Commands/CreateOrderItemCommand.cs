@@ -1,10 +1,10 @@
-﻿using Application.Constants;
+using Application.Constants;
 using Application.Interfaces;
+using Application.UseCases.OrderItems.Mappings;
 using Application.UseCases.OrderItems.Requests;
 using Application.UseCases.OrderItems.Responses;
 using Application.UseCases.Orders.Specifications;
 using Application.Wrappers;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
@@ -17,20 +17,18 @@ namespace Application.UseCases.OrderItems.Commands
     }
     internal class CreateOrderItemCommandHandler(
         IRepositoryAsync<Order> orderRepositoryAsync,
-        IRepositoryAsync<OrderItem> orderItemRepositoryAsync,
-        IMapper mapper) : IRequestHandler<CreateOrderItemCommand, Response<OrderItemResponse>>
+        IRepositoryAsync<OrderItem> orderItemRepositoryAsync) : IRequestHandler<CreateOrderItemCommand, Response<OrderItemResponse>>
     {
         private readonly IRepositoryAsync<Order> _orderRepositoryAsync = orderRepositoryAsync;
         private readonly IRepositoryAsync<OrderItem> _orderItemRepositoryAsync = orderItemRepositoryAsync;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<Response<OrderItemResponse>> Handle(CreateOrderItemCommand command, CancellationToken cancellationToken)
         {
             var record = await _orderRepositoryAsync.FirstOrDefaultAsync(new GetOrderByIdSpecification(command.OrderId), cancellationToken) ?? throw new KeyNotFoundException(ResponseMessages.NotFoundMessage);
-            var newOrderItem = _mapper.Map<OrderItem>(command.Request);
+            var newOrderItem = command.Request.ToEntity();
             newOrderItem.OrderId = record.Id;
             var newOrderItemCreated = await _orderItemRepositoryAsync.AddAsync(newOrderItem, cancellationToken);
-            return Response<OrderItemResponse>.Success(_mapper.Map<OrderItemResponse>(newOrderItemCreated), ResponseMessages.AddedSuccesfullyMessage);
+            return Response<OrderItemResponse>.Success(newOrderItemCreated.ToResponse(), ResponseMessages.AddedSuccesfullyMessage);
         }
     }
 }

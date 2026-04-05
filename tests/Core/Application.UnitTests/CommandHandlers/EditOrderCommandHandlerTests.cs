@@ -1,29 +1,21 @@
-﻿using Application.Constants;
+using Application.Constants;
 using Application.Interfaces;
 using Application.UseCases.Orders.Commands;
 using Application.UseCases.Orders.Requests;
 using Application.UseCases.Orders.Responses;
 using Application.UseCases.Orders.Specifications;
-using AutoMapper;
 using Domain.Entities;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.CommandHandlers
 {
     public class EditOrderCommandHandlerTests
     {
         private readonly Mock<IRepositoryAsync<Order>> _orderRepositoryMock;
-        private readonly Mock<IMapper> _mapperMock;
 
         public EditOrderCommandHandlerTests()
         {
             _orderRepositoryMock = new Mock<IRepositoryAsync<Order>>();
-            _mapperMock = new Mock<IMapper>();
         }
 
         [Fact]
@@ -38,17 +30,14 @@ namespace Application.UnitTests.CommandHandlers
             var command = new EditOrderCommand(editOrderRequest);
 
             var existingOrder = new Order { Id = 1, Comment = "Original comment" };
-            var updatedOrderResponse = new OrderResponse { Id = 1, Comment = "Updated order comment" };
 
-            // Mock the repository and mapping behavior
+            // Mock the repository behavior
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.UpdateAsync(existingOrder, CancellationToken.None))
                 .Returns(Task.CompletedTask);
-            _mapperMock.Setup(x => x.Map<OrderResponse>(existingOrder))
-                .Returns(updatedOrderResponse);
 
-            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object, _mapperMock.Object);
+            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -57,7 +46,7 @@ namespace Application.UnitTests.CommandHandlers
             Assert.NotNull(result);
             Assert.True(result.Succeeded);
             Assert.Equal(ResponseMessages.UpdatedSuccessfullyMessage, result.Message);
-            Assert.Equal(updatedOrderResponse, result.Data);
+            Assert.Equal("Updated order comment", result.Data.Comment);
         }
 
         [Fact]
@@ -75,7 +64,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync((Order)null);
 
-            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object, _mapperMock.Object);
+            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.Handle(command, CancellationToken.None));
@@ -101,7 +90,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.UpdateAsync(existingOrder, CancellationToken.None))
                 .Returns(Task.CompletedTask);
 
-            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object, _mapperMock.Object);
+            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
             // Act
             await handler.Handle(command, CancellationToken.None);
@@ -129,7 +118,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.UpdateAsync(existingOrder, CancellationToken.None))
                 .ThrowsAsync(new Exception("Error updating order"));
 
-            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object, _mapperMock.Object);
+            var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<Exception>(() => handler.Handle(command, CancellationToken.None));

@@ -1,10 +1,10 @@
-﻿using Application.Constants;
+using Application.Constants;
 using Application.Interfaces;
+using Application.UseCases.Products.Mappings;
 using Application.UseCases.Products.Requests;
 using Application.UseCases.Products.Responses;
 using Application.UseCases.Products.Specifications;
 using Application.Wrappers;
-using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
@@ -15,10 +15,9 @@ namespace Application.UseCases.Products.Commands
         public EditProductRequest Request { get; } = request;
     }
 
-    internal class EditProductCommandHandler(IRepositoryAsync<Product> repositoryAsync, IMapper mapper) : IRequestHandler<EditProductCommand, Response<ProductResponse>>
+    internal class EditProductCommandHandler(IRepositoryAsync<Product> repositoryAsync) : IRequestHandler<EditProductCommand, Response<ProductResponse>>
     {
         private readonly IRepositoryAsync<Product> _repositoryAsync = repositoryAsync;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<Response<ProductResponse>> Handle(EditProductCommand command, CancellationToken cancellationToken)
         {
@@ -29,7 +28,7 @@ namespace Application.UseCases.Products.Commands
             product.StockQuantity = command.Request.StockQuantity;
             product.IsActive = command.Request.IsActive;
             await _repositoryAsync.UpdateAsync(product, cancellationToken);
-            return Response<ProductResponse>.Success(_mapper.Map<ProductResponse>(product), ResponseMessages.UpdatedSuccessfullyMessage);
+            return Response<ProductResponse>.Success(product.ToResponse(), ResponseMessages.UpdatedSuccessfullyMessage);
         }
     }
 }

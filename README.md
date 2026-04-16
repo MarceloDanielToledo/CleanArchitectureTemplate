@@ -4,6 +4,8 @@
 
 # Clean Architecture Template 
 
+<img src="assets/banner.png" alt="Clean Architecture Template Banner" width="100%"/>
+
 This repository provides a starting point for developing APIs in .NET following the principles of **Clean Architecture**. Designed to be modular, scalable, and easy to maintain, this template facilitates the development of robust and well-structured applications.
 
 ## Why this template?

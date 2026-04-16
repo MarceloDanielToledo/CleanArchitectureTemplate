@@ -1,0 +1,9 @@
+.vs/
+bin/
+obj/
+publish/
+out/
+packages/
+**/packages/
+*.nupkg
+*.snupkg

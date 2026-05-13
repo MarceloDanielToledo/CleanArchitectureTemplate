@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Application.Exceptions
+﻿namespace Application.Exceptions
 {
     public class ApplicationException : Exception
     {
@@ -20,6 +18,5 @@ namespace Application.Exceptions
         {
             Errors.Add(error);
         }
-        public ApplicationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

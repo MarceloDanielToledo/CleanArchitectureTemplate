@@ -35,7 +35,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.UpdateAsync(existingOrder, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
@@ -88,7 +88,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.UpdateAsync(existingOrder, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 
@@ -141,7 +141,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<Order>(), CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditOrderCommandHandler(_orderRepositoryMock.Object);
 

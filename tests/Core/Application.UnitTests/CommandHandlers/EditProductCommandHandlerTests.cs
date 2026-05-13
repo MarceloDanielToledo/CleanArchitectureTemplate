@@ -47,7 +47,7 @@ namespace Application.UnitTests.CommandHandlers
             _repositoryAsyncMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(product);
             _repositoryAsyncMock.Setup(x => x.UpdateAsync(product, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditProductCommandHandler(_repositoryAsyncMock.Object);
 
@@ -194,7 +194,7 @@ namespace Application.UnitTests.CommandHandlers
             _repositoryAsyncMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(product);
             _repositoryAsyncMock.Setup(x => x.UpdateAsync(product, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditProductCommandHandler(_repositoryAsyncMock.Object);
 
@@ -239,7 +239,7 @@ namespace Application.UnitTests.CommandHandlers
             _repositoryAsyncMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(product);
             _repositoryAsyncMock.Setup(x => x.UpdateAsync(product, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new EditProductCommandHandler(_repositoryAsyncMock.Object);
 

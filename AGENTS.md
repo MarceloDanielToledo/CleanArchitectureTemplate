@@ -1,8 +1,12 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
-> **Parity with AGENTS.md**: this file and `AGENTS.md` must be kept in sync. Every change to `CLAUDE.md` must be replicated in `AGENTS.md` and vice versa.
+> **Parity with CLAUDE.md**: this file and `CLAUDE.md` must be kept in sync. Every change to `AGENTS.md` must be replicated in `CLAUDE.md` and vice versa.
+
+> [!IMPORTANT]
+> **LANGUAGE INSTRUCTION FOR AGENTS**: Although this file is written in English, the Agent MUST ALWAYS respond to the user in **SPANISH**.
+> **IMPLEMENTATION PLAN**: The proposed implementation plan MUST ALWAYS be in **SPANISH**.
 
 ---
 

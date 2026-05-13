@@ -33,7 +33,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.DeleteAsync(existingOrder, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new DelteOrderCommandHandler(_orderRepositoryMock.Object);
 
@@ -96,7 +96,7 @@ namespace Application.UnitTests.CommandHandlers
             _orderRepositoryMock.Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpecification>(), CancellationToken.None))
                 .ReturnsAsync(existingOrder);
             _orderRepositoryMock.Setup(x => x.DeleteAsync(existingOrder, CancellationToken.None))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(0);
 
             var handler = new DelteOrderCommandHandler(_orderRepositoryMock.Object);
 

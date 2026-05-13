@@ -29,6 +29,7 @@ builder.Services.AddOpenApi(options =>
         doc.Info.Version = "v1";
         return Task.CompletedTask;
     });
+    options.AddSchemaTransformer<WebAPI.OpenApi.SchemaExamplesTransformer>();
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddRepositoryServices(builder.Configuration);

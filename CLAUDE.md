@@ -98,6 +98,13 @@ To add a new migration:
 dotnet ef migrations add <MigrationName> --project src/Infraestructure/Repository --startup-project src/Presentation/WebAPI
 ```
 
+### Idempotency & Resilience
+
+- Decorate POST actions with `[Idempotent]` (`WebAPI/Filters`). Clients send an `Idempotency-Key` header; the first successful (2xx) response is stored in the `IdempotencyRecords` table via `IIdempotencyStore` and replayed on retries (`Idempotent-Replayed: true`). Same key with a different payload → 422; concurrent request still in progress → 409; failed executions release the key. Use `[Idempotent(required: true)]` to make the header mandatory.
+- SQL Server uses `EnableRetryOnFailure` (config: `Resilience:Database`). If you open explicit transactions, wrap them in `context.Database.CreateExecutionStrategy().ExecuteAsync(...)`.
+- Requests have a default timeout (`Resilience:RequestTimeout`, 504 on expiry). Always accept a `CancellationToken` in actions and pass it to the handler.
+- Every `HttpClient` from `IHttpClientFactory` gets the standard resilience handler (retry, circuit breaker, timeouts).
+
 ### API Documentation
 
 Scalar UI replaces Swagger. Available at `/scalar/v1` in Development environment.

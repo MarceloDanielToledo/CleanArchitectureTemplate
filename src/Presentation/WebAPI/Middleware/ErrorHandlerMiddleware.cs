@@ -16,6 +16,11 @@ namespace WebAPI.Middleware
             {
                 await _next(context);
             }
+            catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+            {
+                // The client disconnected: nothing to answer and not a server error.
+                _logger.LogInformation("Request {Method} {Path} was cancelled by the client", context.Request.Method, context.Request.Path);
+            }
             catch (Exception error)
             {
                 var response = context.Response;

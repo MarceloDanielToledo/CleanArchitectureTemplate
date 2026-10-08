@@ -7,6 +7,7 @@ using Application.UseCases.Products.Responses;
 using Application.Wrappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Filters;
 
 namespace WebAPI.Controllers.v1
 {
@@ -26,7 +27,12 @@ namespace WebAPI.Controllers.v1
         /// <response code="201">Product created successfully.</response>
         /// <response code="400">Validation error.</response>
         /// <response code="500">Internal server error.</response>
+        /// <response code="409">A request with the same Idempotency-Key is still in progress.</response>
+        /// <response code="422">The Idempotency-Key was already used with a different payload.</response>
         [HttpPost]
+        [Idempotent]
+        [ProducesResponseType<Response<object>>(StatusCodes.Status409Conflict)]
+        [ProducesResponseType<Response<object>>(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType<Response<ProductResponse>>(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
         {

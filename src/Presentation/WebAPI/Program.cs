@@ -7,6 +7,7 @@ using System.Text.Json;
 using Serilog;
 using System.Text.Json.Serialization;
 using WebAPI.Extensions;
+using WebAPI.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +30,12 @@ builder.Services.AddOpenApi(options =>
         doc.Info.Version = "v1";
         return Task.CompletedTask;
     });
+    options.AddOperationTransformer<IdempotencyKeyOperationTransformer>();
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddRepositoryServices(builder.Configuration);
 builder.Services.AddSharedServices();
+builder.Services.AddResilienceExtension(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,6 +45,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 app.UseErrorHandlerMiddleware();
+app.UseRequestTimeouts();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

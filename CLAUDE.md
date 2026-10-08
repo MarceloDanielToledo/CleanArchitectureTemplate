@@ -33,7 +33,7 @@ dotnet test --filter "FullyQualifiedName~CreateOrderCommandHandlerTests"
 
 ## Architecture Overview
 
-This is a .NET 9 Clean Architecture template with CQRS. The layers enforce a strict one-way dependency rule: `WebAPI → Application → Domain`, with `Repository` implementing contracts defined in `Application`, and `Shared` providing cross-cutting utilities.
+This is a .NET 10 Clean Architecture template with CQRS. The layers enforce a strict one-way dependency rule: `WebAPI → Application → Domain`, with `Repository` implementing contracts defined in `Application`, and `Shared` providing cross-cutting utilities.
 
 ### Layers
 
@@ -101,7 +101,7 @@ dotnet ef migrations add <MigrationName> --project src/Infraestructure/Repositor
 ### API Documentation
 
 Scalar UI replaces Swagger. Available at `/scalar/v1` in Development environment.
-- `Microsoft.AspNetCore.OpenApi` — native .NET 9 OpenAPI document generation (`AddOpenApi()` / `MapOpenApi()`)
+- `Microsoft.AspNetCore.OpenApi` — native .NET 10 OpenAPI document generation (`AddOpenApi()` / `MapOpenApi()`)
 - `Scalar.AspNetCore` — interactive UI (`MapScalarApiReference()`)
 - Response types documented via `[ProducesResponseType<T>]` on each action; common error codes (400, 500) on `BaseApiController`
 

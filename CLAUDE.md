@@ -33,7 +33,7 @@ dotnet test --filter "FullyQualifiedName~CreateOrderCommandHandlerTests"
 
 ## Architecture Overview
 
-This is a .NET 9 Clean Architecture template with CQRS. The layers enforce a strict one-way dependency rule: `WebAPI → Application → Domain`, with `Repository` implementing contracts defined in `Application`, and `Shared` providing cross-cutting utilities.
+This is a .NET 10 Clean Architecture template with CQRS. The layers enforce a strict one-way dependency rule: `WebAPI → Application → Domain`, with `Repository` implementing contracts defined in `Application`, and `Shared` providing cross-cutting utilities.
 
 ### Layers
 
@@ -98,10 +98,17 @@ To add a new migration:
 dotnet ef migrations add <MigrationName> --project src/Infraestructure/Repository --startup-project src/Presentation/WebAPI
 ```
 
+### Idempotency & Resilience
+
+- Decorate POST actions with `[Idempotent]` (`WebAPI/Filters`). Clients send an `Idempotency-Key` header; the first successful (2xx) response is stored in the `IdempotencyRecords` table via `IIdempotencyStore` and replayed on retries (`Idempotent-Replayed: true`). Same key with a different payload → 422; concurrent request still in progress → 409; failed executions release the key. Use `[Idempotent(required: true)]` to make the header mandatory.
+- SQL Server uses `EnableRetryOnFailure` (config: `Resilience:Database`). If you open explicit transactions, wrap them in `context.Database.CreateExecutionStrategy().ExecuteAsync(...)`.
+- Requests have a default timeout (`Resilience:RequestTimeout`, 504 on expiry). Always accept a `CancellationToken` in actions and pass it to the handler.
+- Every `HttpClient` from `IHttpClientFactory` gets the standard resilience handler (retry, circuit breaker, timeouts).
+
 ### API Documentation
 
 Scalar UI replaces Swagger. Available at `/scalar/v1` in Development environment.
-- `Microsoft.AspNetCore.OpenApi` — native .NET 9 OpenAPI document generation (`AddOpenApi()` / `MapOpenApi()`)
+- `Microsoft.AspNetCore.OpenApi` — native .NET 10 OpenAPI document generation (`AddOpenApi()` / `MapOpenApi()`)
 - `Scalar.AspNetCore` — interactive UI (`MapScalarApiReference()`)
 - Response types documented via `[ProducesResponseType<T>]` on each action; common error codes (400, 500) on `BaseApiController`
 

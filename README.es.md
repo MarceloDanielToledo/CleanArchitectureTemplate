@@ -51,7 +51,7 @@ public class SeedData
 
 ## Requisitos
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - SQL Server o SQL Server Express — **o Docker** (ver abajo)
 
 ## Inicio rápido
@@ -162,7 +162,7 @@ Ver [`tests/Presentation/Presentation.IntegrationTests`](tests/Presentation/Pres
 | Ardalis.Specification | Especificaciones para queries del repositorio |
 | FluentValidation | Validación de entrada de comandos |
 | Asp.Versioning.Mvc | Versionado de la API |
-| Microsoft.AspNetCore.OpenApi | Generación nativa de documentos OpenAPI (.NET 9) |
+| Microsoft.AspNetCore.OpenApi | Generación nativa de documentos OpenAPI (.NET 10) |
 | Scalar.AspNetCore | UI interactiva de documentación de la API |
 | Serilog | Logging estructurado |
 | Moq | Mocking para tests unitarios |
